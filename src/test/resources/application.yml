@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: local
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/vaiv?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: telefield@1
+logging.level:
+  org.hibernate.SQL: debug
+
+data.file: data/press.tsv

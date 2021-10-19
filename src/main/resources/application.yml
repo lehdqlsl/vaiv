@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: local
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driverClassName: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3306/vaiv?characterEncoding=UTF-8&serverTimezone=UTC
+    username: vaiv
+    password: vaiv
+
+data.file: data/press.tsv

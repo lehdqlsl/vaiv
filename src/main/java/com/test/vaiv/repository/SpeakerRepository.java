@@ -1,0 +1,8 @@
+package com.test.vaiv.repository;
+
+import com.test.vaiv.domain.Speaker;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SpeakerRepository extends JpaRepository <Speaker,Long> {
+
+}

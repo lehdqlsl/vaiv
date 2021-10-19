@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/d3-milestones/build/d3-milestones.css">
+    <script src="https://unpkg.com/d3-milestones/build/d3-milestones.min.js"></script>
+</head>
+<body>
+<div class="card">
+    <div class="card-header">기자회견 조회하기</div>
+    <div class="card-body">
+        <form th:action="@{/press}" method="get">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col"><input type="text" name="startDate" id="startDate" class="form-control"
+                                            placeholder="YYYY-mm-dd"></div>
+                    <div class="col"><input type="text" name="endDate" id="endDate" class="form-control"
+                                            placeholder="YYYY-mm-dd"></div>
+                    <div class="col"><input type="text" name="name" id="name" class="form-control" placeholder="이름">
+                    </div>
+                    <div class="col"><input type="text" name="party" id="party" class="form-control" placeholder="정당명">
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">조회</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="title" style="text-align: center; font-size: 16px; font-weight: bold; margin: 12px 0px;">
+    <span>타임라인 제목 영역</span>
+</div>
+<!-- #wrapper의 height는 600px로 고정 -->
+<div id="wrapper" style="overflow: auto; position: relative; height: 600px;">
+    <!-- d3-milestones를 이용해서 타임라인을 출력하는 영역(조회된 기자회견 개수 * 40px로 height를 동적으로 설정할 것, 최소값: 550px)
+    -->
+    <div id="timeline"></div>
+</div>
+</body>
+<script th:inline="javascript">
+    let pressList = [[${press}]];
+
+    // timeline height 변경
+    let timeline = document.getElementById('timeline');
+    let height = pressList.length * 40;
+
+    if(height < 550){
+        height = 550;
+    }
+
+    timeline.style.height = height + 'px';
+
+    milestones('#timeline')
+        .mapping({
+            'timestamp': 'date',
+            'text': 'title'
+        })
+        .optimize(true)
+        .orientation('vertical')
+        .labelFormat('%Y-%m-%d')
+        .render(pressList);
+</script>
+</html>
