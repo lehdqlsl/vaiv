@@ -20,12 +20,25 @@ public class PressController {
 
     @GetMapping("/press")
     public String getPress(@ModelAttribute @Valid SearchDto searchDto, Model model) {
-
-        System.out.println("인자:"+searchDto);
         List<PressDto> pressList = pressService.findPressByOption(searchDto);
-        System.out.println(pressList);
         model.addAttribute("press", pressList);
+        model.addAttribute("title", getTitle(searchDto));
         return "index";
+    }
+
+    private String getTitle(SearchDto searchDto) {
+        if (!searchDto.getName().equals("")) {
+            return String.format("%s 기자회견 타임라인", searchDto.getName());
+        } else if (!searchDto.getParty().equals("")) {
+            return String.format("%s 기자회견 타임라인", searchDto.getParty());
+        } else if (searchDto.getStartDate() != null && searchDto.getEndDate() != null) {
+            return String.format("%s ~ %s 타임라인", searchDto.getStartDate(), searchDto.getEndDate());
+        } else if (searchDto.getStartDate() != null) {
+            return String.format("%s 이후 타임라인", searchDto.getStartDate());
+        } else if (searchDto.getEndDate() != null) {
+            return String.format("%s 이전 타임라인", searchDto.getStartDate());
+        }
+        return "전체 타임라인";
     }
 
 }
