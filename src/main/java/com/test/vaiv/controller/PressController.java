@@ -7,11 +7,15 @@ import com.test.vaiv.service.PressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -23,6 +27,22 @@ public class PressController {
         List<PressDto> pressList = pressService.findPressByOption(searchDto);
         model.addAttribute("press", pressList);
         model.addAttribute("title", getTitle(searchDto));
+        return "index";
+    }
+
+    @PostMapping("/api/press")
+    @ResponseBody
+    public Map<String, Object> getPress(@RequestBody SearchDto searchDto) {
+        HashMap<String, Object> ret = new HashMap<>();
+        List<PressDto> pressList = pressService.findPressByOption(searchDto);
+        ret.put("press", pressList);
+        ret.put("title", getTitle(searchDto));
+        return ret;
+    }
+
+    @ExceptionHandler(BindException.class)
+    public String error(Model model) {
+        model.addAttribute("error", true);
         return "index";
     }
 
