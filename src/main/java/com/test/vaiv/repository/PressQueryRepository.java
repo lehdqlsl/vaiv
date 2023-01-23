@@ -31,26 +31,24 @@ public class PressQueryRepository extends QuerydslRepositorySupport {
         JPAQuery<PressDto> ret = queryFactory.select(new QPressDto(qPress.date, qPress.title));
 
         if (searchDto.getStartDate() != null) {
-            builder.and(qPress.date.after(searchDto.getStartDate().minusDays(1)));
+            builder.and(qPress.date.goe(searchDto.getStartDate()));
         }
 
         if (searchDto.getEndDate() != null) {
-            builder.and(qPress.date.before(searchDto.getEndDate().plusDays(1)));
+            builder.and(qPress.date.loe(searchDto.getEndDate()));
         }
 
-        if (!searchDto.getName().equals("")) {
+        if (!searchDto.getName().isEmpty()) {
             builder.and(qSpeaker.name.eq(searchDto.getName()));
         }
 
-        if (!searchDto.getParty().equals("")) {
+        if (!searchDto.getParty().isEmpty()) {
             builder.and(qSpeaker.party.eq(searchDto.getParty()));
         }
 
-        if (searchDto.getName().equals("") && searchDto.getParty().equals("")) {
-            // Press 테이블만 검색.
+        if (searchDto.getName().isEmpty() && searchDto.getParty().isEmpty()) {
             ret.from(qPress).where(builder);
         } else {
-            // 발언자 테이블 조인하여 검색
             ret.from(qPress)
                     .rightJoin(qSpeaker)
                     .on(qPress.id.eq(qSpeaker.press.id))
