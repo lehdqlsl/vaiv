@@ -44,9 +44,7 @@ public class Speaker {
         if (matcher.find()) {
             name = matcher.group(1);
             party_name = matcher.group(2);
-        }
-
-        if (etc_matcher.find()) {
+        } else if (etc_matcher.find()) {
             name = etc_matcher.group(1);
             party_name = "기타";
         }
