@@ -35,8 +35,10 @@ public class initSampleData {
         File file = new File(dataFile);
         if (!file.exists()) return;
 
+        // Gof의 디자인 패턴
+        // Adapter Pattern
         List<Press> presses = new BufferedReader(new FileReader(file))
-                .lines()
+                .lines()// java 8, stream
                 .skip(1)
                 .map(data -> Press.toPress(data))
                 .filter(Objects::nonNull)
