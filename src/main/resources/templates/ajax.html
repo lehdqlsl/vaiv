@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/d3-milestones/build/d3-milestones.css">
+    <script src="https://unpkg.com/d3-milestones/build/d3-milestones.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="card">
+    <div class="card-header">기자회견 조회하기</div>
+    <div class="card-body">
+        <div class="form-group">
+            <div class="row">
+                <div class="col"><input type="text" name="startDate" id="startDate" class="form-control"
+                                        placeholder="YYYY-mm-dd"></div>
+                <div class="col"><input type="text" name="endDate" id="endDate" class="form-control"
+                                        placeholder="YYYY-mm-dd"></div>
+                <div class="col"><input type="text" name="name" id="name" class="form-control" placeholder="이름">
+                </div>
+                <div class="col"><input type="text" name="party" id="party" class="form-control" placeholder="정당명">
+                </div>
+                <div class="col">
+                    <button id="btn_send" class="btn btn-primary">조회</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="title"
+     style="text-align: center; font-size: 16px; font-weight: bold; margin: 12px 0px;">
+    <span id="timelineTitle">타임라인 제목 영역</span>
+</div>
+<div id="wrapper" style="overflow: auto; position: relative; height: 600px;">
+    <div id="timeline"></div>
+</div>
+</body>
+</html>
+<script>
+    $("#btn_send").click(function () {
+        $.ajax({
+            type: "GET",
+            data: {
+                from_date: $('#startDate').val(),
+                to_date: $('#endDate').val(),
+                name: $('#name').val(),
+                party: $('#party').val()
+            },
+            url: "/api/press"
+        }).done(function (result) {
+            $("#timelineTitle").text(result.title)
+            milestones('#timeline')
+                .mapping({
+                    'timestamp': 'date',
+                    'text': 'title'
+                })
+                .optimize(true)
+                .labelFormat('%Y-%m-%d')
+                .render(result.press)
+        })
+    })
+</script>

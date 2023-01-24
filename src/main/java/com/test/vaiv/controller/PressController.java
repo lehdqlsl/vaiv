@@ -1,6 +1,5 @@
 package com.test.vaiv.controller;
 
-import com.test.vaiv.domain.Press;
 import com.test.vaiv.dto.PressDto;
 import com.test.vaiv.dto.SearchDto;
 import com.test.vaiv.service.PressService;
@@ -8,10 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +28,11 @@ public class PressController {
         model.addAttribute("press", pressList);
         model.addAttribute("title", getTitle(searchDto));
         return "index";
+    }
+
+    @GetMapping("/ajax")
+    public String ajax() {
+        return "ajax";
     }
 
     @GetMapping("/api/press")
